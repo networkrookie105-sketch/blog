@@ -1,72 +1,72 @@
 <template>
-	<!-- 使用 grid 网格布局，并指定列数为 2，高度占满全屏 -->
-    <div class="grid grid-cols-2 h-screen">
-	     <!-- 默认占两列，order 用于指定排列顺序，md 用于适配非移动端（PC 端） -->
-        <div class="col-span-2 order-2 p-10 md:col-span-1 md:order-1 bg-slate-900">
-            <!-- 指定为 flex 布局，并设置为屏幕垂直水平居中，高度为 100% -->
-            <div class="flex justify-center items-center h-full flex-col animate__animated animate__bounceInLeft animate__fast">
-                <h2 class="font-bold text-4xl mb-7 text-white">ROOKIE-BLOG 博客</h2>
-                <p class="text-white">一款由 Spring Boot + Mybaits Plus + Vue 3.2 + Vite 4 开发的前后端分离博客。</p>
-                <!-- 指定图片宽度为父级元素的 1/2 -->
-                <img src="@/assets/rookie.png" class="w-1/2">
-            </div>
-        </div>
-        <div class="col-span-2 order-1 md:col-span-1 md:order-2 bg-white">
-            <!-- flex-col 用于指定子元素垂直排列 -->
-            <div class="flex justify-center items-center h-full flex-col animate__animated animate__bounceInRight animate__fast">
-                <!-- 大标题，设置字体粗细、大小、下边距 -->
-                <h1 class="font-bold text-4xl mb-5">欢迎回来</h1>
-                <!-- 设置 flex 布局，内容垂直水平居中，文字颜色，以及子内容水平方向 x 轴间距 -->
-                <div class="flex items-center justify-center mb-7 text-gray-400 space-x-2">
-                    <!-- 左边横线，高度为 1px, 宽度为 16，背景色设置 -->
-                    <span class="h-[1px] w-16 bg-gray-200"></span>
-                    账号密码登录
-                    <!-- 右边横线 -->
-                    <span class="h-[1px] w-16 bg-gray-200"></span>
+    <div class="login-wrap site-dark">
+        <div class="aurora"><div class="grid"></div></div>
+
+        <div class="content-layer grid min-h-screen grid-cols-1 md:grid-cols-2">
+            <!-- 左侧品牌区 -->
+            <div class="relative order-2 hidden flex-col items-center justify-center p-10 md:order-1 md:flex">
+                <div class="animate__animated animate__fadeInLeft animate__fast flex flex-col items-center text-center">
+                    <h2 class="mb-5 text-4xl font-extrabold">
+                        <span class="brand">ROOKIE BLOG</span>
+                    </h2>
+                    <p class="max-w-sm text-sm leading-7 text-white/50">
+                        一款由 Spring Boot + MyBatis Plus + Vue 3.2 + Vite 4 打造的前后端分离博客系统。
+                    </p>
+                    <img src="@/assets/rookie.png" class="mt-8 w-1/2 opacity-90 drop-shadow-[0_10px_40px_rgba(124,58,237,0.4)]" />
                 </div>
-                <!-- 引入 Element Plus 表单组件，移动端设置宽度为 5/6，PC 端设置为 2/5 -->
-                <el-form class="w-5/6 md:w-2/5" ref="formRef"  :rules="rules" :model="form">
-                    <el-form-item prop="username">
-                    	<!-- 输入框组件 -->
-                        <el-input size="large" v-model="form.username" placeholder="请输入用户名" :prefix-icon="User" clearable />
-                    </el-form-item>
-                    <el-form-item prop="password">
-	                    <!-- 密码框组件 -->
-                        <el-input size="large" type="password" v-model="form.password" placeholder="请输入密码" :prefix-icon="Lock" clearable show-password />
-                    </el-form-item>
-                    <el-form-item>
-                    	<!-- 登录按钮，宽度设置为 100% -->
-                        <el-button class="w-full" size="large" :loading="loading" type="primary" @click="onSubmit">登录</el-button>
-                    </el-form-item>
-                </el-form>
-                
+            </div>
+
+            <!-- 右侧登录表单 -->
+            <div class="order-1 flex items-center justify-center p-6 md:order-2">
+                <div class="login-card animate__animated animate__fadeInUp animate__fast w-full max-w-md rounded-[24px] border border-white/10 bg-white/[0.04] p-8 shadow-2xl shadow-black/40 backdrop-blur-xl md:p-10">
+                    <h1 class="text-3xl font-extrabold text-white">欢迎回来</h1>
+                    <div class="mb-8 mt-3 flex items-center gap-3 text-sm text-white/40">
+                        <span class="h-px flex-1 bg-white/10"></span>
+                        账号密码登录
+                        <span class="h-px flex-1 bg-white/10"></span>
+                    </div>
+
+                    <el-form ref="formRef" :rules="rules" :model="form">
+                        <el-form-item prop="username">
+                            <el-input size="large" v-model="form.username" placeholder="请输入用户名" :prefix-icon="User" clearable />
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input size="large" type="password" v-model="form.password" placeholder="请输入密码" :prefix-icon="Lock" clearable show-password />
+                        </el-form-item>
+                        <el-form-item>
+                            <button
+                                type="button"
+                                class="login-btn mt-2 w-full rounded-xl py-3 text-sm font-semibold text-white"
+                                :disabled="loading"
+                                @click="onSubmit"
+                            >
+                                {{ loading ? '登录中...' : '登 录' }}
+                            </button>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </div>
         </div>
     </div>
 </template>
+
 <script setup>
-// 引入 Element Plus 中的用户、锁图标
 import { User, Lock } from '@element-plus/icons-vue'
 import { login } from '@/api/admin/user'
 import { useRouter } from "vue-router";
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-import { ElMessage } from 'element-plus'
-import { showMessage} from '@/composables/util'
+import { showMessage } from '@/composables/util'
 import { setToken } from '@/composables/cookie'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
-// 定义响应式数据
 const form = reactive({
     username: '',
     password: ''
 })
 const router = useRouter()
-// 登录按钮加载
 const loading = ref(false)
-// 表单引用
 const formRef = ref(null)
-// 表单验证规则
 const rules = {
     username: [
         { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -76,60 +76,81 @@ const rules = {
     ]
 }
 const onSubmit = () => {
-    console.log('登录')
-    // 先验证 form 表单字段
     formRef.value.validate((valid) => {
         if (!valid) {
-            console.log('表单验证不通过')
             return false
         }
-        // 开始加载
         loading.value = true
-
-        // 调用登录接口
         login(form.username, form.password).then((res) => {
-            console.log(res)
-            // 判断是否成功
             if (res.success == true) {
-                // 提示登录成功
                 showMessage('登录成功')
-                // 保存 token
                 let token = res.data.token
                 setToken(token)
-
-                // 获取用户信息，并存储到全局状态中
                 userStore.setUserInfo()
-
-                // 跳转到后台首页
                 router.push('/admin/index')
             } else {
-                // 获取服务端返回的错误消息
-                let message = res.message
-                // 提示消息
-                showMessage(message, 'error')
+                showMessage(res.message, 'error')
             }
         })
         .finally(() => {
-            // 结束加载
             loading.value = false
         })
     })
 }
-//按回车键后，执行登录事件
 function onKeyUp(e) {
-    console.log(e)
     if (e.key == "Enter") {
         onSubmit()
-    } 
+    }
 }
-// 注册键盘事件
 onMounted(() => {
-    console.log('注册键盘事件')
     document.addEventListener('keyup', onKeyUp)
 })
-// 注销键盘事件
 onBeforeUnmount(() => {
-    console.log('注销键盘事件')
     document.removeEventListener('keyup', onKeyUp)
 })
 </script>
+
+<style scoped>
+.login-wrap {
+    min-height: 100vh;
+}
+.brand {
+    background: linear-gradient(120deg, #ffffff, #c4b5fd 50%, #67e8f9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.login-btn {
+    background: linear-gradient(120deg, #7c3aed, #6366f1 45%, #22d3ee);
+    box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.7);
+    transition: transform 0.25s, filter 0.25s;
+}
+.login-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Element Plus 输入框深色覆盖 */
+.login-card :deep(.el-input__wrapper) {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    border-radius: 12px;
+}
+.login-card :deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.6) inset;
+}
+.login-card :deep(.el-input__inner) {
+    color: #fff;
+}
+.login-card :deep(.el-input__inner::placeholder) {
+    color: rgba(255, 255, 255, 0.4);
+}
+.login-card :deep(.el-input__prefix),
+.login-card :deep(.el-input__suffix) {
+    color: rgba(255, 255, 255, 0.5);
+}
+</style>

@@ -1,38 +1,42 @@
 <template>
-    <Header></Header>
+    <div class="site-dark">
+        <div class="aurora"><div class="grid"></div></div>
+        <div class="content-layer">
+            <Header />
 
-    <!-- 主内容区域 -->
-    <main class="container max-w-screen-xl mx-auto p-4 px-6">
-        <!-- grid 表格布局，分为 4 列 -->
-        <div class="grid grid-cols-4 gap-7">
-            <!-- 左边栏，占用 3 列 -->
-            <div class="col-span-4 md:col-span-3 mb-3">
-                <!-- 标签 -->
-                <div v-if="tags && tags.length > 0"
-                    class="w-full p-5 mb-3 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
-                    <!-- 标签标题 -->
-                    <h2 class="mb-2 font-bold text-gray-900 uppercase dark:text-white">标签</h2>
-                    <!-- 标签列表 -->
-                    <span v-for="(tag, index) in tags" :key="index" @click="goTagArticleListPage(tag.id, tag.name)"
-                        class="inline-block mb-1 cursor-pointer bg-green-100 text-green-800 text-xl font-medium mr-2 px-5 py-3 rounded-full hover:bg-green-200 hover:text-green-900 dark:bg-green-900 dark:text-green-300">
-                        {{ tag.name }}
-                    </span>
+            <main class="mx-auto max-w-screen-xl px-4 py-10">
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+                    <section class="min-w-0">
+                        <div v-reveal class="mb-6 rounded-[24px] glass p-6 md:p-8">
+                            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-white/40">Tags</p>
+                            <h1 class="mt-3 text-4xl font-extrabold text-white">全部<span class="gradient-text">标签</span></h1>
+                        </div>
+
+                        <div v-if="tags && tags.length > 0" v-reveal class="rounded-[20px] glass p-6">
+                            <div class="flex flex-wrap gap-3">
+                                <button
+                                    v-for="tag in tags"
+                                    :key="tag.id"
+                                    type="button"
+                                    class="tag-pill rounded-full px-5 py-2.5 text-base font-medium"
+                                    @click="goTagArticleListPage(tag.id, tag.name)"
+                                >
+                                    # {{ tag.name }}
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <aside class="space-y-5 lg:sticky lg:top-24 lg:self-start">
+                        <UserInfoCard />
+                        <CategoryListCard />
+                    </aside>
                 </div>
-            </div>
+            </main>
 
-            <!-- 右边侧边栏，占用一列 -->
-            <aside class="col-span-4 md:col-span-1">
-                <!-- 博主信息 -->
-                <UserInfoCard></UserInfoCard>
-
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
-            </aside>
+            <Footer />
         </div>
-
-    </main>
-
-    <Footer></Footer>
+    </div>
 </template>
 
 <script setup>
@@ -45,7 +49,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-// 所有标签
 const tags = ref([])
 getTagList().then((res) => {
     if (res.success) {
@@ -53,10 +56,22 @@ getTagList().then((res) => {
     }
 })
 
-// 跳转标签文章列表页
 const goTagArticleListPage = (id, name) => {
-    // 跳转时通过 query 携带参数（标签 ID、标签名称）
-    router.push({path: '/tag/article/list', query: {id, name}})
+    router.push({ path: '/tag/article/list', query: { id, name } })
 }
 </script>
 
+<style scoped>
+.tag-pill {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.03);
+    transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.25s;
+}
+.tag-pill:hover {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(120deg, #7c3aed, #22d3ee);
+    transform: translateY(-2px);
+}
+</style>

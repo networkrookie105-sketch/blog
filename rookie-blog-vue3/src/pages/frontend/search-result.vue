@@ -1,58 +1,67 @@
 <template>
-    <Header />
+    <div class="site-dark">
+        <div class="aurora"><div class="grid"></div></div>
+        <div class="content-layer">
+            <Header />
 
-    <main class="mx-auto max-w-screen-xl px-4 py-8">
-        <section class="mb-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">Search</p>
-            <h1 class="mt-3 text-3xl font-semibold text-slate-950">
-                搜索 “{{ keyword }}”
-            </h1>
-            <p class="mt-2 text-sm text-slate-500">共找到 {{ total }} 篇相关文章</p>
-        </section>
+            <main class="mx-auto max-w-screen-xl px-4 py-10">
+                <section v-reveal class="mb-8 rounded-[24px] glass p-6 md:p-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.22em] text-white/40">Search</p>
+                    <h1 class="mt-3 text-3xl font-extrabold text-white">
+                        搜索 <span class="gradient-text">“{{ keyword }}”</span>
+                    </h1>
+                    <p class="mt-2 text-sm text-white/50">共找到 {{ total }} 篇相关文章</p>
+                </section>
 
-        <section class="min-w-0">
-            <div v-if="loading" class="text-center text-sm text-slate-400 py-16">搜索中...</div>
+                <section class="min-w-0">
+                    <div v-if="loading" class="py-16 text-center text-sm text-white/40">搜索中...</div>
 
-            <div v-else-if="articles.length" class="space-y-4">
-                <article
-                    v-for="a in articles"
-                    :key="a.id"
-                    class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                >
-                    <button type="button" class="flex w-full gap-5 p-5 text-left" @click="goArticle(a.id)">
-                        <img v-if="a.cover" :src="a.cover" class="hidden h-28 w-40 shrink-0 rounded-xl object-cover sm:block" alt="" />
-                        <div class="min-w-0">
-                            <h2 class="line-clamp-1 text-xl font-semibold text-slate-950 group-hover:text-slate-700">
-                                {{ a.title }}
-                            </h2>
-                            <p class="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{{ a.summary }}</p>
-                            <span class="mt-3 block text-xs text-slate-400">
-                                {{ formatDate(a.createTime) }}
-                            </span>
-                        </div>
-                    </button>
-                </article>
+                    <div v-else-if="articles.length" class="space-y-4">
+                        <article
+                            v-for="(a, i) in articles"
+                            :key="a.id"
+                            v-reveal="i * 70"
+                            class="group overflow-hidden rounded-[20px] glass glass-hover"
+                        >
+                            <button type="button" class="flex w-full gap-5 p-5 text-left" @click="goArticle(a.id)">
+                                <div class="hidden h-28 w-40 shrink-0 overflow-hidden rounded-xl sm:block">
+                                    <img v-if="a.cover" :src="a.cover" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" alt="" />
+                                    <div v-else class="h-full w-full" style="background: linear-gradient(135deg, #16162a, #22d3ee 160%)"></div>
+                                </div>
+                                <div class="min-w-0">
+                                    <h2 class="line-clamp-1 text-xl font-bold text-white transition group-hover:text-cyan-200">
+                                        {{ a.title }}
+                                    </h2>
+                                    <p class="mt-2 line-clamp-2 text-sm leading-6 text-white/45">{{ a.summary }}</p>
+                                    <span class="mt-3 block text-xs text-white/35">
+                                        {{ formatDate(a.createTime) }}
+                                    </span>
+                                </div>
+                            </button>
+                        </article>
 
-                <nav v-if="pages > 1" class="mt-10 flex justify-center gap-2">
-                    <button class="pager-button" :disabled="current <= 1" @click="doSearch(current - 1)">上一页</button>
-                    <button
-                        v-for="pageNo in pages"
-                        :key="pageNo"
-                        class="pager-button"
-                        :class="{ 'bg-slate-950 text-white': pageNo === current }"
-                        @click="doSearch(pageNo)"
-                    >
-                        {{ pageNo }}
-                    </button>
-                    <button class="pager-button" :disabled="current >= pages" @click="doSearch(current + 1)">下一页</button>
-                </nav>
-            </div>
+                        <nav v-if="pages > 1" class="mt-10 flex justify-center gap-2">
+                            <button class="pager" :disabled="current <= 1" @click="doSearch(current - 1)">上一页</button>
+                            <button
+                                v-for="pageNo in pages"
+                                :key="pageNo"
+                                class="pager"
+                                :class="{ 'pager-active': pageNo === current }"
+                                @click="doSearch(pageNo)"
+                            >
+                                {{ pageNo }}
+                            </button>
+                            <button class="pager" :disabled="current >= pages" @click="doSearch(current + 1)">下一页</button>
+                        </nav>
+                    </div>
 
-            <div v-else class="py-16 text-center text-sm text-slate-400">没有找到相关文章，换个关键词试试~</div>
-        </section>
-    </main>
+                    <div v-else class="py-16 text-center text-sm text-white/40">没有找到相关文章，换个关键词试试~</div>
+                </section>
+            </main>
 
-    <Footer />
+            <Footer />
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -111,16 +120,27 @@ watch(
 </script>
 
 <style scoped>
-.pager-button {
-    border: 1px solid rgb(226 232 240);
+.pager {
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 9999px;
-    padding: 0.4rem 0.9rem;
+    padding: 0.45rem 0.95rem;
     font-size: 0.85rem;
-    background: #fff;
-    transition: all 0.2s;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.25s;
 }
-.pager-button:disabled {
-    opacity: 0.5;
+.pager:hover:not(:disabled) {
+    color: #fff;
+    border-color: transparent;
+    background: rgba(124, 58, 237, 0.25);
+}
+.pager:disabled {
+    opacity: 0.4;
     cursor: not-allowed;
+}
+.pager-active {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(120deg, #7c3aed, #22d3ee);
 }
 </style>
