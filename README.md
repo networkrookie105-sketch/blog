@@ -4,10 +4,13 @@
 
 > 仓库：`git@gitee.com:NaiSiTuMaiTiYou/blog.git`
 
+**语言：** 简体中文 | [English](./README.en.md)
+
 ---
 
 ## 目录
 
+- [界面预览](#界面预览)
 - [功能特性](#功能特性)
 - [技术栈](#技术栈)
 - [项目结构](#项目结构)
@@ -18,9 +21,24 @@
   - [启动后端](#启动后端)
   - [启动前端](#启动前端)
 - [配置说明](#配置说明)
+- [Docker 部署](#docker-部署)
 - [接口概览](#接口概览)
 - [常见问题](#常见问题)
 - [路线图](#路线图)
+
+---
+
+## 界面预览
+
+> 截图占位：将实际截图放入 `docs/screenshots/` 目录后，替换下方图片链接即可。
+
+| 前台首页 | 文章详情 |
+|:---:|:---:|
+| ![首页](docs/screenshots/home.png) | ![详情](docs/screenshots/article.png) |
+
+| 后台看板 | 评论管理 |
+|:---:|:---:|
+| ![看板](docs/screenshots/dashboard.png) | ![评论](docs/screenshots/comment.png) |
 
 ---
 
@@ -203,6 +221,102 @@ npm run preview    # 本地预览构建产物
 > ⚠️ 生产环境请务必通过环境变量覆盖数据库密码、JWT 密钥与 MinIO 密钥，切勿使用默认值。
 
 多环境配置：`application.yml`（公共）、`application-dev.yml`、`application-test.yml`、`application-prod.yml`，通过 `spring.profiles.active` 切换。
+
+---
+
+## Docker 部署
+
+> 以下为参考配置，可按需调整版本、路径与密钥。
+
+### 1. 后端打包镜像
+
+在 `rookie-blog/` 下新建 `Dockerfile`：
+
+```dockerfile
+# ---- 构建阶段 ----
+FROM maven:3.8-openjdk-8 AS build
+WORKDIR /app
+COPY . .
+RUN mvn -q -DskipTests clean package
+
+# ---- 运行阶段 ----
+FROM openjdk:8-jre-alpine
+WORKDIR /app
+COPY --from=build /app/rookie-web/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### 2. 前端打包镜像
+
+在 `rookie-blog-vue3/` 下新建 `Dockerfile`（Nginx 托管静态产物并反代 `/api`）：
+
+```dockerfile
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+# 需自备 nginx.conf：将 /api 反向代理到后端 8080
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+```
+
+### 3. docker-compose 一键编排
+
+在仓库根目录新建 `docker-compose.yml`：
+
+```yaml
+version: "3.8"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: rookieblog
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./rookie-blog/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  backend:
+    build: ./rookie-blog
+    depends_on:
+      - mysql
+    environment:
+      DB_URL: "jdbc:p6spy:mysql://mysql:3306/rookieblog?useUnicode=true&characterEncoding=UTF-8&useSSL=false"
+      DB_USERNAME: root
+      DB_PASSWORD: "123456"
+      JWT_SECRET: "请替换为你自己的强随机密钥"
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./rookie-blog-vue3
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql-data:
+```
+
+启动：
+
+```bash
+docker compose up -d --build
+```
+
+- 前台：http://localhost/
+- 后端：http://localhost:8080/doc.html
+
+> 说明：`schema.sql` 会在 MySQL 容器首次初始化时自动执行；生产环境请务必修改数据库密码与 `JWT_SECRET`。
 
 ---
 
