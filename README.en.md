@@ -212,7 +212,15 @@ Multi-env config: `application.yml` (shared), `application-dev.yml`, `applicatio
 
 ## Docker Deployment
 
-> Reference configs — adjust versions, paths, and secrets as needed.
+> These files are already included — no manual creation needed. One command to start everything:
+> `rookie-blog/Dockerfile`, `rookie-blog-vue3/Dockerfile`, `rookie-blog-vue3/nginx.conf`, and the root `docker-compose.yml` (with a MySQL healthcheck so the backend waits for a ready DB).
+>
+> ```bash
+> docker compose up -d --build
+> ```
+> Frontend http://localhost/ , backend http://localhost:8080/doc.html . Always change the DB password and `JWT_SECRET` in production.
+>
+> File contents for reference below.
 
 ### 1. Backend image
 

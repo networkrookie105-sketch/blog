@@ -226,7 +226,15 @@ npm run preview    # 本地预览构建产物
 
 ## Docker 部署
 
-> 以下为参考配置，可按需调整版本、路径与密钥。
+> 项目已内置以下文件，无需手动创建，可直接一键启动：
+> `rookie-blog/Dockerfile`、`rookie-blog-vue3/Dockerfile`、`rookie-blog-vue3/nginx.conf`、根目录 `docker-compose.yml`（含 MySQL 健康检查，后端会等待数据库就绪后再启动）。
+>
+> ```bash
+> docker compose up -d --build
+> ```
+> 前台 http://localhost/ ，后端 http://localhost:8080/doc.html 。生产环境务必修改数据库密码与 `JWT_SECRET`。
+>
+> 以下为各文件内容参考。
 
 ### 1. 后端打包镜像
 

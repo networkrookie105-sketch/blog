@@ -1,0 +1,11 @@
+# 构建产物
+**/target/
+# IDE
+.idea/
+**/*.iml
+# 合并单仓库后保留的子仓库备份
+.git.bak/
+**/.git.bak/
+# 其它
+HELP.md
+*.log
