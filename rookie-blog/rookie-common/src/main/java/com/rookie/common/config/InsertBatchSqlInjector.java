@@ -1,0 +1,30 @@
+package com.rookie.common.config;
+
+import com.baomidou.mybatisplus.core.injector.AbstractMethod;
+import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
+import com.baomidou.mybatisplus.core.injector.methods.*;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/**
+ * @author peishunwu
+ * @ClassName InsertBatchSqlInjector
+ * @description: TODO
+ * @date 2024年05月30日
+ * @version: 1.0
+ */
+public class InsertBatchSqlInjector extends DefaultSqlInjector {
+    @Override
+    public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
+        // super.getMethodList() 保留 Mybatis Plus 自带的方法
+       List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
+       // 添加自定义方法
+        methodList.add(new InsertBatchSomeColumn());
+        return methodList;
+    }
+
+}

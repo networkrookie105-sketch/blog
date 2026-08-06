@@ -1,0 +1,21 @@
+import axios from "@/axios";
+// 获取tag分页数据
+export function getTagPageList(data) {
+    return axios.post("/admin/tag/list", data)
+}
+// 添加tag
+export function addTag(data) {
+    return axios.post("/admin/tag/add", data)
+}
+//删除tag
+export function deleteTag(id) {
+    return axios.post("/admin/tag/delete",{id})
+}
+//根据标签名模糊查询
+export function searchTags(key) {
+    return axios.post("/admin/tag/select/list", null, { params: { name: key } })
+}
+// 获取标签 select 列表数据
+export function getTagSelectList() {
+    return axios.post("/admin/tag/select/all/list")
+}
