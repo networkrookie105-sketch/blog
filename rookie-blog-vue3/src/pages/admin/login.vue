@@ -4,15 +4,46 @@
 
         <div class="content-layer grid min-h-screen grid-cols-1 md:grid-cols-2">
             <!-- 左侧品牌区 -->
-            <div class="relative order-2 hidden flex-col items-center justify-center p-10 md:order-1 md:flex">
-                <div class="animate__animated animate__fadeInLeft animate__fast flex flex-col items-center text-center">
-                    <h2 class="mb-5 text-4xl font-extrabold">
-                        <span class="brand">ROOKIE BLOG</span>
+            <div class="relative order-2 hidden flex-col justify-center overflow-hidden p-14 md:order-1 md:flex">
+                <!-- 装饰：旋转光环 + 光球 -->
+                <div class="orb-deco" aria-hidden="true">
+                    <span class="ring ring-1"></span>
+                    <span class="ring ring-2"></span>
+                    <span class="ring ring-3"></span>
+                    <span class="core"></span>
+                </div>
+
+                <div class="animate__animated animate__fadeInLeft animate__fast relative z-10 max-w-md">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium tracking-[0.28em] text-white/60">
+                        <span class="h-1.5 w-1.5 rounded-full" style="background:#22d3ee;box-shadow:0 0 8px #22d3ee"></span>
+                        ADMIN CONSOLE
+                    </span>
+                    <h2 class="mt-6 text-6xl font-extrabold leading-[1.05]">
+                        <span class="brand">ROOKIE</span><br />
+                        <span class="text-white">BLOG</span>
                     </h2>
-                    <p class="max-w-sm text-sm leading-7 text-white/50">
-                        一款由 Spring Boot + MyBatis Plus + Vue 3.2 + Vite 4 打造的前后端分离博客系统。
+                    <p class="mt-6 max-w-sm text-sm leading-7 text-white/50">
+                        基于 Spring Boot + Vue 3 的前后端分离博客管理后台，在这里管理你的文章、评论与灵感。
                     </p>
-                    <img src="@/assets/rookie.png" class="mt-8 w-1/2 opacity-90 drop-shadow-[0_10px_40px_rgba(124,58,237,0.4)]" />
+
+                    <ul class="mt-8 space-y-3.5">
+                        <li class="flex items-center gap-3 text-sm text-white/75">
+                            <span class="feat-dot"></span> 文章 · 分类 · 标签 一站式管理
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/75">
+                            <span class="feat-dot"></span> 评论审核 与 数据看板
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/75">
+                            <span class="feat-dot"></span> 全文搜索 · 本地缓存 · JWT 鉴权
+                        </li>
+                    </ul>
+
+                    <div class="mt-10 flex flex-wrap gap-2">
+                        <span class="stack-chip">Spring Boot</span>
+                        <span class="stack-chip">Vue 3</span>
+                        <span class="stack-chip">MyBatis-Plus</span>
+                        <span class="stack-chip">Element Plus</span>
+                    </div>
                 </div>
             </div>
 
@@ -119,6 +150,88 @@ onBeforeUnmount(() => {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+}
+
+/* 左侧装饰：同心旋转光环 + 呼吸光球 */
+.orb-deco {
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    width: 520px;
+    height: 520px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 0;
+}
+.orb-deco .ring {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.orb-deco .ring-1 {
+    width: 520px;
+    height: 520px;
+    border-top-color: rgba(124, 58, 237, 0.55);
+    border-left-color: rgba(34, 211, 238, 0.35);
+    animation: orb-spin 42s linear infinite;
+}
+.orb-deco .ring-2 {
+    width: 380px;
+    height: 380px;
+    border-top-color: rgba(34, 211, 238, 0.55);
+    animation: orb-spin 30s linear infinite reverse;
+}
+.orb-deco .ring-3 {
+    width: 250px;
+    height: 250px;
+    border-right-color: rgba(124, 58, 237, 0.6);
+    animation: orb-spin 22s linear infinite;
+}
+.orb-deco .core {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, rgba(124, 58, 237, 0.95), rgba(34, 211, 238, 0.5) 58%, transparent 74%);
+    filter: blur(4px);
+    animation: orb-pulse 6s ease-in-out infinite;
+}
+@keyframes orb-spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes orb-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.12); opacity: 1; }
+}
+
+/* 功能亮点小圆点 */
+.feat-dot {
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-radius: 50%;
+    background: linear-gradient(120deg, #7c3aed, #22d3ee);
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.7);
+}
+
+/* 技术栈胶囊 */
+.stack-chip {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 9999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orb-deco .ring,
+    .orb-deco .core { animation: none; }
 }
 .login-btn {
     background: linear-gradient(120deg, #7c3aed, #6366f1 45%, #22d3ee);

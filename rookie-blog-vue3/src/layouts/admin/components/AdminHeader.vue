@@ -1,9 +1,9 @@
 <template>
     <el-affix :offset="0">
             <!-- 通过flex指定水平布局 --><!-- 设置背景色为白色、高度为 64px，padding-right 为 4， border-bottom 为 slate 200 -->
-        <div class="bg-white h-[64px] flex pr-4 border-b border-slate-100">
+        <div class="h-[64px] flex pr-4 border-b border-white/10 backdrop-blur-xl" style="background: rgba(12,12,21,0.8)">
             <!-- 左边栏收缩、展开 -->
-            <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200" @click="handleMenuWidth">
+            <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white" @click="handleMenuWidth">
                 <el-icon>
                     <Fold v-if="menuStore.menuWidth == '250px'"/>
                     <Expand v-else />
@@ -13,7 +13,7 @@
             <div class="ml-auto flex">
                 <!-- 点击刷新页面 -->
                 <el-tooltip class="box-item" effect="dark" content="刷新" placement="bottom">
-                    <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200"
+                    <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white"
                         @click="handleRefresh">
                         <el-icon>
                             <Refresh />
@@ -22,7 +22,7 @@
                 </el-tooltip>
                 <el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom">
                     <!-- 点击全屏展示 -->
-                    <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 mr-2 hover:bg-gray-200" @click="toggle">
+                    <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-white/70 mr-2 hover:bg-white/10 hover:text-white" @click="toggle">
                         <el-icon>
                             <FullScreen v-if="!isFullscreen"/>
                             <Aim v-else/>
@@ -32,7 +32,7 @@
                 
                  <!-- 登录用户头像 -->
                  <el-dropdown class="flex items-center justify-center" @command="handleCommand">
-                    <span class="el-dropdown-link flex items-center justify-center text-gray-700 text-xs">
+                    <span class="el-dropdown-link flex items-center justify-center text-white/80 text-xs">
                         <!-- 头像 Avatar -->
                         <el-avatar :size="25" src="https://pics1.baidu.com/feed/e1fe9925bc315c60e30f31f30f8b1818485477de.jpeg@f_auto?token=eef4f0c8d51019e4035466504f1f0ced" />
                         {{ userStore.userInfo.username }}

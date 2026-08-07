@@ -1,6 +1,6 @@
 <template>
     <!-- 外层容器 -->
-    <el-container>
+    <el-container class="admin-shell">
     
         <!-- 左边侧边栏 -->
         <el-aside :width="menuStore.menuWidth" class="transition-all">

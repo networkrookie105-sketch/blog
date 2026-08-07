@@ -11,8 +11,8 @@
                             </el-icon>
                         </div>
                         <div class="ml-4">
-                            <div class="text-2xl font-bold text-slate-800">{{ card.value }}</div>
-                            <div class="text-sm text-slate-400 mt-1">{{ card.label }}</div>
+                            <div class="text-2xl font-bold text-white">{{ card.value }}</div>
+                            <div class="text-sm text-white/50 mt-1">{{ card.label }}</div>
                         </div>
                     </div>
                 </el-card>

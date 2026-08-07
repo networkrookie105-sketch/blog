@@ -32,9 +32,9 @@
                     <!-- 固钉组件，固钉到顶部 -->
                     <el-affix :offset="20" style="width: 100%;">
                          <!-- 指定 flex 布局， 高度为 10， 背景色为白色 -->
-                        <div class="flex h-10 bg-white">
+                        <div class="flex h-10">
                             <!-- 字体加粗 -->
-                            <h4 class="font-bold">写文章</h4>
+                            <h4 class="font-bold text-white">写文章</h4>
                             <!-- 靠右对齐 -->
                              <div class="ml-auto flex">
                                 <el-button @click="isArticlePublishEditorShow = false">取消</el-button>
@@ -61,7 +61,7 @@
                     </el-form-item>
                     <el-form-item label="内容" prop="content">
                         <!-- Markdown 编辑器 -->
-                         <MdEditor v-model="form.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor" />
+                         <MdEditor v-model="form.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor" theme="dark" />
                     </el-form-item>
                     <el-form-item label="封面" prop="cover">
                         <el-upload class="avatar-uploader" action="#" :on-change="handleCoverChange" :auto-upload="false" :show-file-list="false">
@@ -97,8 +97,8 @@
                     <!-- 固钉组件，固钉到顶部 -->
                     <el-affix :offset="20" style="width: 100%;">
                         <!-- 指定 flex 布局， 高度为 10， 背景色为白色 -->
-                        <div class="flex h-10 bg-white">
-                            <h4 class="font-bold">编辑文章</h4>
+                        <div class="flex h-10">
+                            <h4 class="font-bold text-white">编辑文章</h4>
                             <div class="ml-auto flex">
                                 <el-button @click="isArticleUpdateEditorShow = false">取消</el-button>
                                 <el-button type="primary" @click="updateSubmit">
@@ -118,7 +118,7 @@
                     </el-form-item>
                     <el-form-item label="内容" prop="content">
                         <!-- Markdown 编辑器 -->
-                        <MdEditor v-model="updateArticleForm.content" @onUploadImg="onUploadImg" editorId="updateArticleEditor" />
+                        <MdEditor v-model="updateArticleForm.content" @onUploadImg="onUploadImg" editorId="updateArticleEditor" theme="dark" />
                     </el-form-item>
                     <el-form-item label="封面" prop="cover">
                         <el-upload class="avatar-uploader" action="#" :on-change="handleUpdateCoverChange" :auto-upload="false" :show-file-list="false">

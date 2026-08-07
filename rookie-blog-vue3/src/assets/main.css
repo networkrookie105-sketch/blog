@@ -332,3 +332,46 @@ body {
   border-top: 1px solid var(--border);
   margin: 2em 0;
 }
+
+/* =========================================================
+   Element Plus 暗色主题微调（后台 UI 与前台风格统一）
+   ========================================================= */
+html.dark {
+  /* 主色改为品牌紫 */
+  --el-color-primary: #7c3aed;
+  --el-color-primary-light-3: #9a63f0;
+  --el-color-primary-light-5: #b492f3;
+  --el-color-primary-light-7: #d3befa;
+  --el-color-primary-light-8: #e3d6fc;
+  --el-color-primary-light-9: #201830;
+  --el-color-primary-dark-2: #6522cf;
+
+  /* 背景贴近近黑分层 */
+  --el-bg-color: #0c0c15;
+  --el-bg-color-overlay: #12121c;
+  --el-bg-color-page: #07070c;
+  --el-fill-color-blank: #0c0c15;
+  --el-border-color: rgba(255, 255, 255, 0.10);
+  --el-border-color-light: rgba(255, 255, 255, 0.08);
+  --el-border-color-lighter: rgba(255, 255, 255, 0.06);
+  --el-fill-color: rgba(255, 255, 255, 0.05);
+  --el-fill-color-light: rgba(255, 255, 255, 0.04);
+  --el-fill-color-lighter: rgba(255, 255, 255, 0.03);
+}
+
+/* 后台主壳：近黑 + 极光辉光（静态，数据密集页更克制） */
+.admin-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(34, 211, 238, 0.06), transparent 60%),
+    radial-gradient(1000px 520px at -10% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
+    #07070c;
+}
+.admin-shell .el-main {
+  background: transparent;
+}
+/* 后台卡片统一玻璃描边质感 */
+.admin-shell .el-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.6);
+}

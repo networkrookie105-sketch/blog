@@ -1,6 +1,6 @@
 <template>
     <!-- 左边：标签导航栏 -->
-    <div class="fixed top-[64px] h-[44px] px-2 right-0 z-50 flex items-center bg-white transition-all duration-300 shadow" :style="{left: menuStore.menuWidth}">
+    <div class="fixed top-[64px] h-[44px] px-2 right-0 z-50 flex items-center border-b border-white/10 backdrop-blur-xl transition-all duration-300" style="background: rgba(12,12,21,0.8)" :style="{left: menuStore.menuWidth}">
         <el-tabs v-model="activeTab" type="card" class="demo-tabs" @tab-remove="removeTab" @tab-change="tabChange" style="min-width: 10px;">
             <el-tab-pane v-for="item in tabList" :key="item.path" :label="item.title" :name="item.path" :closable="item.path != '/admin/index'">
             </el-tab-pane>
@@ -35,8 +35,12 @@ const { menuStore, activeTab, tabList, tabChange, removeTab, handleCloseTab } = 
 <style>
 .el-tabs__item {
     font-size: 12px;
-    border: 1px solid #d8dce5!important;
+    border: 1px solid rgba(255, 255, 255, 0.12)!important;
     border-radius: 3px!important;
+    color: rgba(255, 255, 255, 0.65);
+}
+.el-tabs__item:hover {
+    color: #fff;
 }
 
 .el-tabs--card>.el-tabs__header .el-tabs__item {
@@ -76,7 +80,7 @@ const { menuStore, activeTab, tabList, tabChange, removeTab, handleCloseTab } = 
     height: 32px;
     line-height: 32px;
     border: 0;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .el-tabs--card>.el-tabs__header {

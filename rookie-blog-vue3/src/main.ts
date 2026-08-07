@@ -1,6 +1,8 @@
 import '@/assets/main.css'
 import 'animate.css';
 import 'nprogress/nprogress.css'
+// Element Plus 暗色主题变量（配合 html.dark 生效）
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import { createApp } from 'vue'
 // 引入全局状态管理 Pinia
 import pinia from '@/stores'
@@ -11,6 +13,9 @@ import router from '@/router'
 import '@/permission'
 // 导入 Element Plus 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
+// 启用 Element Plus 暗色模式（全站深色风格）
+document.documentElement.classList.add('dark')
 
 const app = createApp(App)
 
