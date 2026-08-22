@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rookie Blog - Apple Style Preview</title>
+<style>
+/* ============================================================
+   Apple Design System — 博客首页示例
+   设计理念：干净、留白、字体优先、微妙阴影、内容为核心
+   ============================================================ */
+
+/* --- CSS Variables (Design Tokens) --- */
+:root {
+  /* Colors */
+  --bg-primary:    #f5f5f7;
+  --bg-secondary:  #ffffff;
+  --bg-tertiary:   #fafafa;
+  --text-primary:  #1d1d1f;
+  --text-secondary:#86868b;
+  --text-tertiary: #aeaeae;
+  --accent:        #0071e3;
+  --accent-hover:  #0077ed;
+  --accent-light:  #e8f2fd;
+  --border:        #d2d2d7;
+  --border-light:  #e8e8ed;
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.04), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-card:   0 2px 8px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.04);
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     20px;
+  --radius-xl:     28px;
+
+  /* Typography */
+  --font-sans:     -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono:     'SF Mono', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Spacing */
+  --content-max:   1100px;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+img { max-width: 100%; display: block; }
+
+/* --- Frosted Glass Navigation (macOS style) --- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,245,247,0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.nav-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.nav-brand .logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0071e3, #42a5f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 450;
+  transition: color 0.2s;
+  letter-spacing: -0.01em;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--text-primary);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-search {
+  position: relative;
+}
+
+.nav-search input {
+  width: 200px;
+  height: 34px;
+  padding: 0 16px 0 34px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(0,0,0,0.04);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+
+.nav-search input:focus {
+  width: 240px;
+  background: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.12);
+}
+
+.nav-search .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 8px rgba(0,113,227,0.3);
+}
+
+/* --- Main Content --- */
+.main {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* --- Hero Section --- */
+.hero {
+  text-align: center;
+  padding: 60px 20px 48px;
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero h1 .highlight {
+  color: var(--accent);
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 32px;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* --- Layout Grid --- */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  margin-top: 8px;
+}
+
+/* --- Featured Article --- */
+.featured-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: 45% 1fr;
+}
+
+.featured-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.featured-card .cover {
+  position: relative;
+  min-height: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8f2fd, #f0e6ff);
+}
+
+.featured-card .cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-card .cover .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  color: rgba(0,113,227,0.2);
+}
+
+.featured-card .body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.featured-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.featured-card h2 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+
+.featured-card:hover h2 {
+  color: var(--accent);
+}
+
+.featured-card .summary {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured-card .meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 20px;
+}
+
+/* --- Article Grid --- */
+.article-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.article-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.article-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.article-card .cover {
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f5f7, #e8e8ed);
+}
+
+.article-card .cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.article-card:hover .cover img {
+  transform: scale(1.04);
+}
+
+.article-card .cover .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: rgba(0,113,227,0.15);
+}
+
+.article-card .body {
+  padding: 20px;
+}
+
+.article-card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.tag:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.article-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  transition: color 0.2s;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-card:hover h3 {
+  color: var(--accent);
+}
+
+.article-card .summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-card .meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 14px;
+}
+
+/* --- Pagination --- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.page-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+}
+
+.page-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.page-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.page-btn.direction {
+  width: auto;
+  padding: 0 16px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 80px;
+  align-self: start;
+}
+
+.sidebar-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+/* --- User Info Card --- */
+.user-card {
+  text-align: center;
+}
+
+.user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8f2fd, #d0e8ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--accent);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-card h4 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.user-card .bio {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.user-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.user-social a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.user-social a:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* --- Category & Tag Cards --- */
+.sidebar-card h5 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+
+.category-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.category-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.category-item .count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-cloud .tag {
+  font-size: 12px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+
+/* --- Footer --- */
+.footer {
+  border-top: 1px solid var(--border-light);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.footer p {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.3s; }
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-card .cover {
+    min-height: 200px;
+  }
+
+  .article-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+
+/* --- Selection --- */
+::selection {
+  background: rgba(0,113,227,0.2);
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.25);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <span class="logo">R</span>
+      Rookie Blog
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">首页</a></li>
+      <li><a href="#">分类</a></li>
+      <li><a href="#">标签</a></li>
+      <li><a href="#">归档</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="nav-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜索文章...">
+      </div>
+      <button class="btn-primary">写文章</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Hero -->
+  <section class="hero animate-in">
+    <span class="hero-eyebrow">Latest Notes</span>
+    <h1>写给当下，也写给<span class="highlight">未来回看</span>的自己。</h1>
+    <p>这里收集技术实践、问题复盘，以及生活里那些一闪而过的灵感碎片。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-number">42</div>
+        <div class="hero-stat-label">Articles</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">8</div>
+        <div class="hero-stat-label">Categories</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">15</div>
+        <div class="hero-stat-label">Tags</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+
+    <!-- Main Column -->
+    <section>
+
+      <!-- Featured Article -->
+      <article class="featured-card animate-in delay-1">
+        <div class="cover">
+          <div class="placeholder">📝</div>
+        </div>
+        <div class="body">
+          <div>
+            <span class="featured-badge">精选</span>
+            <h2>Vue 3 Composition API 实战：从入门到精通</h2>
+            <p class="summary">深入探讨 Vue 3 的 Composition API，通过实际项目案例讲解 ref、reactive、computed、watch 等核心概念，以及如何编写可复用的组合函数来大幅提升代码组织能力。</p>
+          </div>
+          <div class="meta">
+            <span>2024-08-15</span>
+            <span>·</span>
+            <span>前端开发</span>
+            <span>·</span>
+            <span>1.2k 阅读</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article Grid -->
+      <div class="article-grid">
+        <article class="article-card animate-in delay-2">
+          <div class="cover">
+            <div class="placeholder">💡</div>
+          </div>
+          <div class="body">
+            <div class="tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">前端</span>
+            </div>
+            <h3>TypeScript 高级类型体操：从泛型到条件类型</h3>
+            <p class="summary">掌握 TypeScript 类型系统的高级用法，让你的代码更加健壮...</p>
+            <div class="meta">
+              <span>2024-08-12</span>
+              <span>·</span>
+              <span>前端开发</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card animate-in delay-3">
+          <div class="cover">
+            <div class="placeholder">🚀</div>
+          </div>
+          <div class="body">
+            <div class="tags">
+              <span class="tag">Docker</span>
+              <span class="tag">DevOps</span>
+            </div>
+            <h3>Docker 容器化部署最佳实践</h3>
+            <p class="summary">从 Dockerfile 编写到多阶段构建，再到 docker-compose 编排...</p>
+            <div class="meta">
+              <span>2024-08-08</span>
+              <span>·</span>
+              <span>后端开发</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card animate-in delay-4">
+          <div class="cover">
+            <div class="placeholder">🎨</div>
+          </div>
+          <div class="body">
+            <div class="tags">
+              <span class="tag">CSS</span>
+              <span class="tag">设计</span>
+            </div>
+            <h3>现代 CSS 布局技巧：Grid 与 Flexbox 实战</h3>
+            <p class="summary">全面对比 Grid 与 Flexbox 的使用场景，分享实际项目中的布局方案...</p>
+            <div class="meta">
+              <span>2024-08-05</span>
+              <span>·</span>
+              <span>前端开发</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card animate-in delay-5">
+          <div class="cover">
+            <div class="placeholder">🔧</div>
+          </div>
+          <div class="body">
+            <div class="tags">
+              <span class="tag">Git</span>
+              <span class="tag">工具</span>
+            </div>
+            <h3>Git 工作流：从单人开发到团队协作</h3>
+            <p class="summary">Git Flow、GitHub Flow、Trunk-Based 开发模式对比与实践经验...</p>
+            <div class="meta">
+              <span>2024-08-01</span>
+              <span>·</span>
+              <span>工具</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination animate-in delay-6">
+        <button class="page-btn direction">← 上一页</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">...</button>
+        <button class="page-btn">8</button>
+        <button class="page-btn direction">下一页 →</button>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+      <!-- User Info Card -->
+      <div class="sidebar-card user-card animate-in delay-2">
+        <div class="user-avatar">👨‍💻</div>
+        <h4>Rookie</h4>
+        <p class="bio">全栈开发者，热爱技术与写作。<br>专注于 Web 开发与开源贡献。</p>
+        <div class="user-social">
+          <a href="#" title="GitHub">GH</a>
+          <a href="#" title="Twitter">Tw</a>
+          <a href="#" title="Email">@</a>
+        </div>
+      </div>
+
+      <!-- Category Card -->
+      <div class="sidebar-card animate-in delay-3">
+        <h5>分类</h5>
+        <ul class="category-list">
+          <li class="category-item">
+            <span>前端开发</span>
+            <span class="count">18</span>
+          </li>
+          <li class="category-item">
+            <span>后端开发</span>
+            <span class="count">10</span>
+          </li>
+          <li class="category-item">
+            <span>DevOps</span>
+            <span class="count">6</span>
+          </li>
+          <li class="category-item">
+            <span>工具推荐</span>
+            <span class="count">5</span>
+          </li>
+          <li class="category-item">
+            <span>生活随笔</span>
+            <span class="count">3</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tag Cloud -->
+      <div class="sidebar-card animate-in delay-4">
+        <h5>标签</h5>
+        <div class="tag-cloud">
+          <span class="tag">Vue</span>
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Docker</span>
+          <span class="tag">CSS</span>
+          <span class="tag">Git</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Python</span>
+          <span class="tag">Linux</span>
+          <span class="tag">算法</span>
+          <span class="tag">设计模式</span>
+          <span class="tag">性能优化</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p>&copy; 2024 Rookie Blog. All rights reserved. Built with Vue 3 & ❤️</p>
+  </div>
+</footer>
+
+</body>
+</html>
