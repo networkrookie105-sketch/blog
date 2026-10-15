@@ -1,6 +1,6 @@
 package com.rookie.admin.model.vo.dashboard;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "后台数据看板统计 VO")
+@Schema(description = "后台数据看板统计 VO")
 public class FindDashboardStatisticsRspVO {
     /** 文章总数 */
     private Long articleCount;

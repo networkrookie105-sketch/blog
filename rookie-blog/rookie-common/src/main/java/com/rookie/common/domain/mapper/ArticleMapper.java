@@ -57,6 +57,12 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
         return selectPage(page, queryWrapper);
     }
 
+    /** 归档按时间排列，不能受文章置顶顺序影响。 */
+    default Page<ArticleDO> selectArchivePageList(Long current, Long size) {
+        return selectPage(new Page<>(current, size), Wrappers.<ArticleDO>lambdaQuery()
+                .eq(ArticleDO::getStatus, 1).orderByDesc(ArticleDO::getCreateTime).orderByDesc(ArticleDO::getId));
+    }
+
     /**
      * 根据文章 ID 列表查询文章列表
      * @param current
@@ -81,22 +87,22 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
      * @return
      */
     default ArticleDO selectPreArticle(Long articleId) {
-        return selectOne(Wrappers.<ArticleDO>lambdaQuery()
-                .orderByAsc(ArticleDO::getId) // 按文章 ID 升序排列
-                .gt(ArticleDO::getId, articleId) // 查询比当前文章 ID 大的
-                .last("limit 1")); // 第一条记录即为上一篇文章
+        ArticleDO current = selectById(articleId);
+        if (current == null || current.getCreateTime() == null) return null;
+        return selectOne(Wrappers.<ArticleDO>lambdaQuery().eq(ArticleDO::getStatus, 1)
+                .and(w -> w.gt(ArticleDO::getCreateTime, current.getCreateTime())
+                        .or(tie -> tie.eq(ArticleDO::getCreateTime, current.getCreateTime()).gt(ArticleDO::getId, articleId)))
+                .orderByAsc(ArticleDO::getCreateTime).orderByAsc(ArticleDO::getId).last("limit 1"));
     }
 
-    /**
-     * 查询下一篇文章
-     * @param articleId
-     * @return
-     */
+    /** 下一篇按文章日期寻找，迁移文章的 ID 顺序可能与日期不一致。 */
     default ArticleDO selectNextArticle(Long articleId) {
-        return selectOne(Wrappers.<ArticleDO>lambdaQuery()
-                .orderByDesc(ArticleDO::getId) // 按文章 ID 倒序排列
-                .lt(ArticleDO::getId, articleId) // 查询比当前文章 ID 小的
-                .last("limit 1")); // 第一条记录即为下一篇文章
+        ArticleDO current = selectById(articleId);
+        if (current == null || current.getCreateTime() == null) return null;
+        return selectOne(Wrappers.<ArticleDO>lambdaQuery().eq(ArticleDO::getStatus, 1)
+                .and(w -> w.lt(ArticleDO::getCreateTime, current.getCreateTime())
+                        .or(tie -> tie.eq(ArticleDO::getCreateTime, current.getCreateTime()).lt(ArticleDO::getId, articleId)))
+                .orderByDesc(ArticleDO::getCreateTime).orderByDesc(ArticleDO::getId).last("limit 1"));
     }
 
     /**

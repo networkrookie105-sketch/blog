@@ -110,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DocumentDelete, View } from '@element-plus/icons-vue'
 import Header from '@/layouts/frontend/components/Header.vue'
@@ -119,6 +119,7 @@ import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CommentSection from '@/components/CommentSection.vue'
+import { profile, siteSettings } from '@/content/profile'
 import { getArticleDetail } from '@/api/frontend/article'
 
 const route = useRoute()
@@ -126,6 +127,7 @@ const router = useRouter()
 const article = ref({})
 const loading = ref(false)
 const errorText = ref('')
+let requestSequence = 0
 
 const formatDate = (value) => {
     if (!value) return ''
@@ -133,6 +135,7 @@ const formatDate = (value) => {
 }
 
 const loadArticle = (id) => {
+    const request = ++requestSequence
     if (!id) {
         errorText.value = '缺少文章 ID。'
         return
@@ -141,17 +144,20 @@ const loadArticle = (id) => {
     errorText.value = ''
     getArticleDetail(id)
         .then((res) => {
+            if (request !== requestSequence) return
             if (res.success) {
                 article.value = res.data || {}
-                document.title = `${article.value.title || '文章详情'} - ROOKIE`
+                document.title = `${article.value.title || '文章详情'} · ${siteSettings.name || profile.name || '个人博客'}`
             } else {
                 errorText.value = res.message || '后端没有返回有效文章。'
             }
         })
         .catch(() => {
+            if (request !== requestSequence) return
             errorText.value = '文章详情接口请求失败，请确认后端服务和文章数据是否正常。'
         })
         .finally(() => {
+            if (request !== requestSequence) return
             loading.value = false
         })
 }
@@ -176,4 +182,5 @@ watch(
     (id) => loadArticle(id),
     { immediate: true }
 )
+onBeforeUnmount(() => { ++requestSequence })
 </script>

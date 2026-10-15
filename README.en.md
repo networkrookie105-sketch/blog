@@ -70,12 +70,12 @@ A full-stack personal blog system built with **Spring Boot + Vue 3**. The backen
 ### Backend
 | Category | Technology |
 |----------|-----------|
-| Core | Spring Boot 2.6.3, Java 8 |
+| Core | Spring Boot 3.5.16, Java 21 |
 | Security | Spring Security, JJWT 0.11.2 |
-| Persistence | MyBatis-Plus 3.5.2, MySQL, HikariCP |
+| Persistence | MyBatis-Plus 3.5.12, MySQL, HikariCP |
 | Cache | Spring Cache + Caffeine |
 | Object storage | MinIO |
-| API docs | Knife4j (Swagger2) |
+| API docs | Knife4j (OpenAPI 3) |
 | Rendering | commonmark (Markdown → HTML) |
 | Others | MapStruct, Lombok, P6Spy, Guava |
 
@@ -139,8 +139,8 @@ rookie-web ──► rookie-admin ──► rookie-common
 ## Getting Started
 
 ### Requirements
-- JDK **1.8**
-- Maven 3.6+
+- JDK **21**
+- Maven 3.6.3+
 - MySQL **5.7+**
 - Node.js **16+** (18 recommended)
 - (Optional) MinIO — only needed for image uploads
@@ -198,7 +198,7 @@ Sensitive backend settings are **externalized** and can be overridden via enviro
 | `DB_URL` | JDBC connection string | local `rookieblog` DB |
 | `DB_USERNAME` | DB username | `root` |
 | `DB_PASSWORD` | DB password | `123456` |
-| `JWT_SECRET` | JWT signing secret | built-in default (override in prod) |
+| `JWT_SECRET` | JWT signing secret (Base64, at least 64 decoded bytes) | built-in default (override in prod) |
 | `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Security built-in account | `admin` / `123456` |
 | `MINIO_ENDPOINT` | MinIO endpoint | see config |
 | `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` | MinIO keys | see config |
@@ -228,13 +228,13 @@ Create `Dockerfile` under `rookie-blog/`:
 
 ```dockerfile
 # ---- build ----
-FROM maven:3.8-openjdk-8 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
 RUN mvn -q -DskipTests clean package
 
 # ---- run ----
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/rookie-web/target/*.jar app.jar
 EXPOSE 8080
@@ -286,7 +286,7 @@ services:
       DB_URL: "jdbc:p6spy:mysql://mysql:3306/rookieblog?useUnicode=true&characterEncoding=UTF-8&useSSL=false"
       DB_USERNAME: root
       DB_PASSWORD: "123456"
-      JWT_SECRET: "replace-with-your-own-strong-secret"
+      JWT_SECRET: "${JWT_SECRET:-aJeC1vzGIG4IV7jeoHlVJI412yxnjGspSxnwjYZ1sHk8D44lCFeWie5U9vx3nsoYLpphBtbRiogQ3RM7IsN0fQ==}"
     ports:
       - "8080:8080"
 

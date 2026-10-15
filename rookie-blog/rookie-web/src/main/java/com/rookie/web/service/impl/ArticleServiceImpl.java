@@ -139,6 +139,8 @@ public class ArticleServiceImpl implements ArticleService {
         // 查询正文
         ArticleContentDO articleContentDO = articleContentMapper.selectByArticleId(articleId);
 
+        if (articleContentDO == null) throw new BizException(ResponseCodeEnum.ARTICLE_NOT_FOUND);
+
         // 阅读量 +1（数据库原子自增）
         articleMapper.increaseReadNum(articleId);
         // 当前展示的阅读量 = 库中旧值 + 本次访问；兼容历史数据 read_num 为 null 的情况
@@ -154,14 +156,16 @@ public class ArticleServiceImpl implements ArticleService {
 
         // 查询所属分类
         ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectByArticleId(articleId);
-        CategoryDO categoryDO = categoryMapper.selectById(articleCategoryRelDO.getCategoryId());
-        vo.setCategoryId(categoryDO.getId());
-        vo.setCategoryName(categoryDO.getName());
+        CategoryDO categoryDO = articleCategoryRelDO == null ? null : categoryMapper.selectById(articleCategoryRelDO.getCategoryId());
+        if (categoryDO != null) {
+            vo.setCategoryId(categoryDO.getId());
+            vo.setCategoryName(categoryDO.getName());
+        }
 
         // 查询标签
         List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByArticleId(articleId);
         List<Long> tagIds = articleTagRelDOS.stream().map(ArticleTagRelDO::getTagId).collect(Collectors.toList());
-        List<TagDo> tagDOS = tagMapper.selectByIds(tagIds);
+        List<TagDo> tagDOS = tagIds.isEmpty() ? Collections.emptyList() : tagMapper.selectByIds(tagIds);
 
         // 标签 DO 转 VO
         List<FindTagListRspVO> tagVOS = tagDOS.stream()

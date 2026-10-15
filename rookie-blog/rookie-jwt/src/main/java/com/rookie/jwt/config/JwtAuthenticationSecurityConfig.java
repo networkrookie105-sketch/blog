@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -22,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @version: 1.0
  */
 @Configuration
-public class JwtAuthenticationSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class JwtAuthenticationSecurityConfig extends AbstractHttpConfigurer<JwtAuthenticationSecurityConfig, HttpSecurity> {
     @Autowired
     private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
     @Autowired
@@ -36,21 +35,18 @@ public class JwtAuthenticationSecurityConfig extends SecurityConfigurerAdapter<D
 
 
     @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
-        // 添加自定义的认证过滤器
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
-        filter.setAuthenticationManager(httpSecurity.getSharedObject(AuthenticationManager.class));
-        // 设置认证成功和失败的处理器
-        filter.setAuthenticationSuccessHandler(restAuthenticationSuccessHandler);
-        filter.setAuthenticationFailureHandler(restAuthenticationFailureHandler);
-        // 直接使用 DaoAuthenticationProvider, 它是 Spring Security 提供的默认的身份验证提供者之一
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        // 设置 userDetailService，用于获取用户的详细信息
-        provider.setUserDetailsService(userDetailsService);
-        // 设置加密算法
+    public void init(HttpSecurity httpSecurity) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         httpSecurity.authenticationProvider(provider);
-        // 将这个过滤器添加到 UsernamePasswordAuthenticationFilter 之前执行
+    }
+
+    @Override
+    public void configure(HttpSecurity httpSecurity) {
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
+        filter.setAuthenticationManager(httpSecurity.getSharedObject(AuthenticationManager.class));
+        filter.setAuthenticationSuccessHandler(restAuthenticationSuccessHandler);
+        filter.setAuthenticationFailureHandler(restAuthenticationFailureHandler);
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }

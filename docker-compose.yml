@@ -35,7 +35,7 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: "123456"
       # 生产务必替换为强随机密钥
-      JWT_SECRET: "change-me-to-a-strong-random-secret"
+      JWT_SECRET: "${JWT_SECRET:-aJeC1vzGIG4IV7jeoHlVJI412yxnjGspSxnwjYZ1sHk8D44lCFeWie5U9vx3nsoYLpphBtbRiogQ3RM7IsN0fQ==}"
       TZ: Asia/Shanghai
     ports:
       - "8080:8080"

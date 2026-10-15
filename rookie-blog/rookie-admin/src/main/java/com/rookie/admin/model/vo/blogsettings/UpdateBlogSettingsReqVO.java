@@ -1,12 +1,12 @@
 package com.rookie.admin.model.vo.blogsettings;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author peishunwu
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = " 博客基础信息修改 VO")
+@Schema(description = " 博客基础信息修改 VO")
 public class UpdateBlogSettingsReqVO {
     private Long id;
 

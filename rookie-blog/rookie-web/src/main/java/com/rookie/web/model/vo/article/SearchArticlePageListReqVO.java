@@ -1,11 +1,11 @@
 package com.rookie.web.model.vo.article;
 
 import com.rookie.common.model.BasePageQuery;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author kiro
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "文章搜索分页 VO")
+@Schema(description = "文章搜索分页 VO")
 public class SearchArticlePageListReqVO extends BasePageQuery {
     @NotBlank(message = "搜索关键字不能为空")
     private String keyword;

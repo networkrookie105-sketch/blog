@@ -1,12 +1,12 @@
 package com.rookie.admin.model.vo.tag;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author peishunwu
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "删除标签 VO")
+@Schema(description = "删除标签 VO")
 public class DeleteTagReqVO {
     @NotNull(message = "标签 ID 不能为空")
     private Long id;

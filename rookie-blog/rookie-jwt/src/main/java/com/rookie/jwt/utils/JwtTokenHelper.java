@@ -70,7 +70,7 @@ public class JwtTokenHelper implements InitializingBean {
         LocalDateTime now = LocalDateTime.now();
         // 设置token过期时间为当前时间 + 30 分钟
         LocalDateTime expireTime = now.plusMinutes(tokenExpireTime);
-        return Jwts.builder().setSubject(username)
+        return Jwts.builder().setId(java.util.UUID.randomUUID().toString()).setSubject(username)
                 .setIssuer(issuer)
                 .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .setExpiration(Date.from(expireTime.atZone(ZoneId.systemDefault()).toInstant()))

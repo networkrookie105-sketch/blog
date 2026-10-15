@@ -1,7 +1,7 @@
 package com.rookie.admin.model.vo.comment;
 
 import com.rookie.common.model.BasePageQuery;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "后台评论分页查询 VO")
+@Schema(description = "后台评论分页查询 VO")
 public class FindCommentPageListReqVO extends BasePageQuery {
     /** 状态：0-待审核，1-已通过，2-已拒绝（可空，查全部） */
     private Integer status;

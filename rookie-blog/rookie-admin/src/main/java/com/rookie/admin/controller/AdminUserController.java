@@ -5,15 +5,15 @@ import com.rookie.admin.service.AdminUserService;
 import com.rookie.common.aspect.ApiOperationLog;
 import com.rookie.common.utils.Response;
 import com.rookie.jwt.utils.TokenBlacklist;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author peishunwu
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/admin")
-@Api(tags = "管理员用户模块")
+@Tag(name = "管理员用户模块")
 public class AdminUserController {
     @Autowired
     private AdminUserService adminUserService;
@@ -39,7 +39,7 @@ public class AdminUserController {
     private String tokenPrefix;
 
     @PostMapping("/logout")
-    @ApiOperation(value = "退出登录")
+    @Operation(summary = "退出登录")
     @ApiOperationLog(description = "退出登录")
     public Response logout(HttpServletRequest request) {
         String header = request.getHeader(tokenHeaderKey);
@@ -54,14 +54,14 @@ public class AdminUserController {
     }
 
     @PostMapping("/password/update")
-    @ApiOperation(value = "更新管理员用户密码")
+    @Operation(summary = "更新管理员用户密码")
     @ApiOperationLog(description = "修改用户密码")
     public Response updatePassword(@RequestBody @Validated UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO) {
         return adminUserService.updatePassword(updateAdminUserPasswordReqVO);
     }
 
     @GetMapping("/user/info")
-    @ApiOperation(value = "获取用户信息")
+    @Operation(summary = "获取用户信息")
     @ApiOperationLog(description = "获取用户信息")
     public Response findUserInfo() {
         return adminUserService.findUserInfo();

@@ -1,9 +1,9 @@
 package com.rookie.admin.model.vo.comment;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author kiro
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @date 2026年08月05日
  */
 @Data
-@ApiModel(value = "评论审核 VO")
+@Schema(description = "评论审核 VO")
 public class UpdateCommentStatusReqVO {
     @NotNull(message = "评论 ID 不能为空")
     private Long id;

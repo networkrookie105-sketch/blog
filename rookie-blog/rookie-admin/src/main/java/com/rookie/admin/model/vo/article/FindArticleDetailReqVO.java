@@ -1,12 +1,12 @@
 package com.rookie.admin.model.vo.article;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author peishunwu
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "查询文章详情请求VO")
+@Schema(description = "查询文章详情请求VO")
 public class FindArticleDetailReqVO {
     /**
      * 文章ID

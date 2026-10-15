@@ -1,6 +1,6 @@
 package com.rookie.web.model.vo.comment;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "文章评论响应 VO")
+@Schema(description = "文章评论响应 VO")
 public class FindCommentListRspVO {
     private Long id;
     private String nickname;

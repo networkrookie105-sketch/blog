@@ -1,6 +1,6 @@
 package com.rookie.admin.model.vo.article;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "查询文章详情响应VO")
+@Schema(description = "查询文章详情响应VO")
 public class FindArticleDetailRspVO {
     private Long id;
 

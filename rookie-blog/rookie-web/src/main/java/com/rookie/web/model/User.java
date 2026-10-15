@@ -1,10 +1,10 @@
 package com.rookie.web.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,11 +17,11 @@ import java.time.LocalTime;
  * @version: 1.0
  */
 @Data
-@ApiModel(value = "用户实体类")
+@Schema(description = "用户实体类")
 public class User {
     // 用户名
     @NotBlank(message = "用户名不能为空") // 注解确保用户名不为空
-    @ApiModelProperty(value = "用户名")
+    @Schema(description = "用户名")
     private String userName;
     // 性别
     @NotNull(message = "性别不能为空") // 注解确保性别不为空

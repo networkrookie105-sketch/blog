@@ -1,6 +1,6 @@
 package com.rookie.web.model.vo.article;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "文章搜索结果 VO")
+@Schema(description = "文章搜索结果 VO")
 public class SearchArticlePageListRspVO {
     private Long id;
     private String title;

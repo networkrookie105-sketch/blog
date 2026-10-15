@@ -1,12 +1,12 @@
 package com.rookie.web.model.vo.comment;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author kiro
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "查询文章评论 VO")
+@Schema(description = "查询文章评论 VO")
 public class FindCommentListReqVO {
     @NotNull(message = "文章 ID 不能为空")
     private Long articleId;

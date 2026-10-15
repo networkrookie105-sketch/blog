@@ -34,7 +34,7 @@ const router = useRouter()
 const isCollapse = computed(() =>  !(menuStore.menuWidth == '250px'))
 
 // 根据路由地址判断哪个菜单被选中
-const defaultActive = ref(route.path)
+const defaultActive = computed(() => route.path)
 
 // 菜单选择事件
 const handleSelect = (path) => {
@@ -42,6 +42,8 @@ const handleSelect = (path) => {
 }
 
 const menus = [
+    { name: '个人资料', icon: 'User', path: '/admin/profile' },
+    { name: '项目管理', icon: 'Briefcase', path: '/admin/projects' },
     {
         'name': '仪表盘',
         'icon': 'Monitor',
@@ -68,7 +70,7 @@ const menus = [
         'path': '/admin/comment/list',
     },
     {
-        'name': '博客设置',
+        'name': '站点设置',
         'icon': 'Setting',
         'path': '/admin/blog/settings',
     },

@@ -1,5 +1,5 @@
 # ---- 构建阶段：Maven 编译打包 ----
-FROM maven:3.8-openjdk-8 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 # 先复制 POM 以尽量利用依赖缓存
 COPY pom.xml .
@@ -12,7 +12,7 @@ COPY . .
 RUN mvn -q -DskipTests clean package
 
 # ---- 运行阶段：仅保留 JRE 与 jar ----
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 ENV TZ=Asia/Shanghai
 COPY --from=build /app/rookie-web/target/*.jar app.jar

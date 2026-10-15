@@ -2,7 +2,7 @@ spring:
   datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-    url: ${DB_URL:jdbc:p6spy:mysql://127.0.0.1:3306/rookieblog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull}
+    url: ${DB_URL:jdbc:p6spy:mysql://127.0.0.1:3306/rookieblog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:123456}
     hikari:
@@ -27,3 +27,8 @@ minio:
   accessKey: ${MINIO_ACCESS_KEY:admin}
   secretKey: ${MINIO_SECRET_KEY:admin123456}
   bucketName: ${MINIO_BUCKET:rookieblog}
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

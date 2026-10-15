@@ -93,6 +93,7 @@
 </template>
 
 <script setup>
+import { leaveAdminEditors } from '@/composables/useSiteSection'
 import { useMenuStore } from '@/stores/menu'
  // 引入 useFullscreen
 import { useFullscreen } from '@vueuse/core'
@@ -167,7 +168,8 @@ const handleCommand = (command) => {
 }
 
 // 退出登录
-function logout() {
+async function logout() {
+    if (!(await leaveAdminEditors())) return
     showModel('是否确认要退出登录？').then(() => {
         userStore.logout()
         showMessage('退出登录成功！')

@@ -8,11 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.http.HttpMethod;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
      * 指定用户登录的访问地址
      */
     public JwtAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/login", "POST"));
+        super(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/login"));
     }
 
     @Override

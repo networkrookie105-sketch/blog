@@ -58,11 +58,11 @@
 - 🛡️ **评论管理**：审核（通过 / 拒绝）、删除（含楼中楼）
 - 📊 **数据看板**：文章 / 分类 / 标签 / 评论数、总阅读量、近 7 天发布趋势
 - 🖼️ **文件上传**：基于 MinIO 的图片存储
-- ⚙️ **博客设置**：站点信息、社交主页配置
+- ⚙️ **个人资料 / 项目管理 / 站点设置**：分区维护个人介绍、项目作品和网站信息
 
 ### 工程能力
 - 🔐 JWT 无状态认证 + Spring Security 角色鉴权 + **登出黑名单**
-- ⚡ **Caffeine 本地缓存**（分类 / 标签 / 博客设置等热点数据）
+- ⚡ **Caffeine 本地缓存**（分类 / 标签等热点数据）
 - 🌐 全局 **CORS** 跨域支持
 - 🧾 统一响应体、全局异常处理、AOP 接口日志
 - 🐢 P6Spy 慢 SQL 监控、Knife4j 在线接口文档
@@ -74,12 +74,12 @@
 ### 后端
 | 分类 | 技术 |
 |------|------|
-| 基础框架 | Spring Boot 2.6.3、Java 8 |
+| 基础框架 | Spring Boot 3.5.16、Java 21 |
 | 安全认证 | Spring Security、JJWT 0.11.2 |
-| 持久层 | MyBatis-Plus 3.5.2、MySQL、HikariCP |
+| 持久层 | MyBatis-Plus 3.5.12、MySQL、HikariCP |
 | 本地缓存 | Spring Cache + Caffeine |
 | 对象存储 | MinIO |
-| 接口文档 | Knife4j（Swagger2 增强） |
+| 接口文档 | Knife4j（OpenAPI 3 增强） |
 | 内容渲染 | commonmark（Markdown → HTML） |
 | 其它 | MapStruct、Lombok、P6Spy、Guava |
 
@@ -135,7 +135,7 @@ rookie-web ──► rookie-admin ──► rookie-common
 - **前后端分离**：前端通过 Vite 代理 `/api` 转发到后端 `http://localhost:8080`。
 - **认证流程**：`POST /login` → 校验用户名密码 → 签发 JWT；后续请求携带 `Authorization: Bearer <token>`，由 `TokenAuthenticationFilter` 校验并重建认证上下文；登出后 Token 进入黑名单立即失效。
 - **鉴权**：`/admin/**` 需登录，写操作使用 `@PreAuthorize("hasRole('ROLE_ADMIN')")`。
-- **缓存**：分类列表、标签列表、博客设置使用 Caffeine 缓存，对应写操作通过 `@CacheEvict` 主动失效。
+- **缓存**：分类列表、标签列表使用 Caffeine 缓存，对应写操作通过 `@CacheEvict` 主动失效。个人资料、项目和站点设置从统一站点数据读取，保存后前台重新获取。
 - **数据模型**：文章元信息（`t_article`）与正文（`t_article_content`）分表；文章与分类 / 标签通过关联表关联；评论采用「一级评论 + 楼中楼」模型。
 
 ---
@@ -143,8 +143,8 @@ rookie-web ──► rookie-admin ──► rookie-common
 ## 快速开始
 
 ### 环境要求
-- JDK **1.8**
-- Maven 3.6+
+- JDK **21**
+- Maven 3.6.3+
 - MySQL **5.7+**
 - Node.js **16+**（推荐 18）
 - （可选）MinIO —— 仅图片上传功能需要
@@ -165,6 +165,11 @@ rookie-web ──► rookie-admin ──► rookie-common
 > 提示：用命令行导入含中文注释的脚本时，建议加 `--default-character-set=utf8mb4` 避免乱码。
 
 ### 启动后端
+
+请先确认 `java -version` 与 `mvn -version` 都使用 JDK 21，Maven 至少为 3.6.3（推荐 3.9.x）。
+使用 SDKMAN 时，可运行 `sdk use java 21.0.12-tem` 与 `sdk use maven 3.9.9` 切换已安装的版本。
+不要仅切换编译器而仍用 Java 8 启动打包后的 JAR。
+
 
 ```bash
 cd rookie-blog
@@ -191,6 +196,16 @@ npm install
 npm run dev
 ```
 
+若本机 `8080` 已被其他项目占用，可将博客后端启动在独立端口：
+
+```bash
+# 在 rookie-blog 目录，先完成打包
+java -jar rookie-web/target/rookie-web-0.0.1-SNAPSHOT.jar --server.port=18080
+```
+
+在 `rookie-blog-vue3/.env.development.local` 中配置 `VITE_API_TARGET=http://127.0.0.1:18080`，再启动前端。
+可参考 `.env.development.example`；未设置时代理仍默认使用 `8080`。代理目标必须是博客后端，而不是同机运行的其他服务。
+
 访问：
 - 前台首页：http://localhost:5173/
 - 后台登录：http://localhost:5173/#/login （admin / 123456）
@@ -205,6 +220,9 @@ npm run preview    # 本地预览构建产物
 
 ## 配置说明
 
+Java 21 / Boot 3.5 迁移详情及回归测试方式见 [升级说明](rookie-blog/UPGRADE.md)。
+
+
 后端敏感配置已**外部化**，支持通过环境变量覆盖（不配则使用本地默认值），配置文件位于 `rookie-blog/rookie-web/src/main/resources/`。
 
 | 环境变量 | 说明 | 默认值 |
@@ -212,7 +230,7 @@ npm run preview    # 本地预览构建产物
 | `DB_URL` | 数据库连接串 | 本地 `rookieblog` 库 |
 | `DB_USERNAME` | 数据库用户名 | `root` |
 | `DB_PASSWORD` | 数据库密码 | `123456` |
-| `JWT_SECRET` | JWT 签名密钥 | 内置默认值（生产务必覆盖） |
+| `JWT_SECRET` | JWT 签名密钥（Base64 编码，解码后至少 64 字节） | 内置默认值（生产务必覆盖） |
 | `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Security 内置账号 | `admin` / `123456` |
 | `MINIO_ENDPOINT` | MinIO 地址 | 见配置文件 |
 | `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` | MinIO 密钥 | 见配置文件 |
@@ -242,13 +260,13 @@ npm run preview    # 本地预览构建产物
 
 ```dockerfile
 # ---- 构建阶段 ----
-FROM maven:3.8-openjdk-8 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
 RUN mvn -q -DskipTests clean package
 
 # ---- 运行阶段 ----
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/rookie-web/target/*.jar app.jar
 EXPOSE 8080
@@ -300,7 +318,7 @@ services:
       DB_URL: "jdbc:p6spy:mysql://mysql:3306/rookieblog?useUnicode=true&characterEncoding=UTF-8&useSSL=false"
       DB_USERNAME: root
       DB_PASSWORD: "123456"
-      JWT_SECRET: "请替换为你自己的强随机密钥"
+      JWT_SECRET: "${JWT_SECRET:-aJeC1vzGIG4IV7jeoHlVJI412yxnjGspSxnwjYZ1sHk8D44lCFeWie5U9vx3nsoYLpphBtbRiogQ3RM7IsN0fQ==}"
     ports:
       - "8080:8080"
 
@@ -344,7 +362,8 @@ docker compose up -d --build
 | POST | `/category/article/list` | 分类下文章 |
 | POST | `/tag/list` | 标签列表 |
 | POST | `/tag/article/list` | 标签下文章 |
-| POST | `/blog/settings/detail` | 博客设置 |
+| GET | `/site` | 公开个人资料、公开项目和站点设置 |
+| POST | `/blog/settings/detail` | 站点设置（兼容旧读取接口） |
 | POST | `/comment/publish` | 发表评论 |
 | POST | `/comment/list` | 文章评论（楼中楼树形） |
 
@@ -358,7 +377,11 @@ docker compose up -d --build
 | POST | `/admin/comment/{list,update/status,delete}` | 评论管理 |
 | GET  | `/admin/dashboard/statistics` | 数据看板统计 |
 | POST | `/admin/file/*` | 文件上传（MinIO） |
-| POST | `/admin/blogSettings/*` | 博客设置 |
+| GET | `/admin/site` | 完整管理资料与版本号 |
+| PUT | `/admin/site/profile` | 保存个人资料与工作经历 |
+| PUT | `/admin/site/projects` | 新增、更新或删除单个项目 |
+| PUT | `/admin/site/settings` | 保存站点设置 |
+| POST | `/admin/blogSettings/detail` | 站点设置（兼容旧读取接口，旧更新接口已停用） |
 | POST | `/admin/user/*` | 用户信息 / 改密 |
 
 完整接口请查看 Knife4j 文档：`http://localhost:8080/doc.html`。
@@ -396,3 +419,25 @@ docker compose up -d --build
 ## 致谢
 
 本项目用于学习与实践 Spring Boot + Vue 3 前后端分离开发。欢迎 Star 与交流。
+
+## 个人博客内容管理
+
+本项目定位为站长自己的博客与个人作品集，公开注册和作者账号创建已关闭。首页、项目、文章、关于我展示站长内容；后台登录入口位于前台页脚，登录后进入统一后台。所有内容管理需要 ROLE_ADMIN。
+
+- `/admin/profile`：个人资料、工作经历、头像与个人链接，使用版本号避免多页面覆盖。
+- `/admin/projects`：项目列表与独立编辑，支持公开状态、首页精选和展示顺序。
+- `/admin/blog/settings`：站点名称、Logo、浏览器图标、网站简介与页脚信息；不再重复配置作者信息。旧 `/admin/site` 跳转个人资料。
+- `/admin/article/list`：完整 Markdown 文章管理，支持草稿、发布、置顶、分类、标签，封面可选。
+- `/admin/category/list` 与 `/admin/tag/list`：分类及标签维护。
+- `/articles`、分类、标签、搜索、归档和详情均从完整文章表读取，公开接口只展示已发布文章。归档按文章日期自动生成。
+- `/site`：站长资料与项目；通过环境变量 `BLOG_OWNER` 选择资料记录，默认 admin。登录用户不能更改公开资料的归属。
+
+已有数据库先备份，再依次执行 `rookie-blog/sql/migration_personal_site.sql`（尚未建个人资料表时）与 `rookie-blog/sql/migration_single_blog.sql`。后者将 admin 的旧 notes 迁入完整文章表，保留标题、正文、日期、分类和发布状态；原文章没有标签时统一标记“个人记录”，后续可在文章后台修改。原 notes JSON 保留为历史备份；不会删除其他账号或资料。脚本可重复执行，不重复导入、不覆盖后续编辑。若 BLOG_OWNER 不为 admin，请先调整脚本中的 @blog_owner。
+
+旧 `/notes/标识` 链接通过迁移映射转到完整文章详情，草稿不能通过旧链接访问。迁移后请只在完整文章后台编辑文章。
+
+个人资料、项目和站点设置分别保存，同一版本号用于检测跨页面冲突，分区保存不会覆盖其他内容。首次进入管理页时自动把旧博客设置中的站点信息、头像和个人链接补入缺失字段；已有姓名与介绍保持不变，旧表原始数据保留。不需要额外 SQL。旧整页保存与旧博客设置写接口返回停用提示，公开设置读取已指向新的唯一数据源。图片上传沿用原有文件服务（MinIO），也可直接填写图片地址。
+
+### 控制个人主页公开
+
+在“站点设置”打开或关闭“公开个人主页”，点击保存后生效。关闭时前台保留博客文章与分类、标签、归档，隐藏个人介绍、经历、技能、项目和联系方式；公开接口也不返回这些资料。项目仍受自身公开状态控制。“个人资料”可分别隐藏邮箱、所在地及 GitHub/Gitee/知乎/CSDN 链接，隐藏不会删除原值。后台“预览已保存内容”仅管理员可见，可在主页关闭时检查展示内容。既有站点默认保持原来的公开状态；博客品牌、网站简介及页脚始终公开。

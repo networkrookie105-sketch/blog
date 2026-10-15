@@ -2,7 +2,7 @@ package com.rookie.admin.controller;
 
 import com.rookie.common.utils.Response;
 import com.rookie.jwt.utils.JwtTokenHelper;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/token")
-@Api(tags = "获取token")
+@Tag(name = "获取token")
 public class TokenController {
 
     @Autowired

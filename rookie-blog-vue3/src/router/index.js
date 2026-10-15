@@ -1,4 +1,9 @@
 import Index from '@/pages/frontend/index.vue'
+import ArticleList from '@/pages/frontend/article-list.vue'
+import Portfolio from '@/pages/frontend/portfolio.vue'
+import LegacyNote from '@/pages/frontend/legacy-note.vue'
+import SiteEditor from '@/pages/admin/site-editor.vue'
+import ProjectList from '@/pages/admin/project-list.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
 import CategoryList from '@/pages/frontend/category-list.vue'
 import CategoryArticleList from '@/pages/frontend/category-article-list.vue'
@@ -17,122 +22,137 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Admin from '@/layouts/admin/admin.vue'
 
 const routes = [
-    {
-        path: '/',
-        component: Index,
-        meta: {
-            title: '首页'
-        }
-    },
-    {
-        path: '/archive/list',
-        component: ArchiveList,
-        meta: {
-            title: '归档'
-        }
-    },
-    {
-        path: '/category/list',
-        component: CategoryList,
-        meta: {
-            title: '分类'
-        }
-    },
-    {
-        path: '/tag/list',
-        component: TagList,
-        meta: {
-            title: '标签'
-        }
-    },
-    {
-        path: '/tag/article/list',
-        component: TagArticleList,
-        meta: {
-            title: '标签文章'
-        }
-    },
-    {
-        path: '/category/article/list',
-        component: CategoryArticleList,
-        meta: {
-            title: '分类文章'
-        }
-    },
-    {
-        path: '/article/detail/:id',
-        component: ArticleDetail,
-        meta: {
-            title: '文章详情'
-        }
-    },
-    {
-        path: '/search',
-        component: SearchResult,
-        meta: {
-            title: '搜索'
-        }
-    },
-    {
-        path: '/login',
-        component: Login,
-        meta: {
-            title: '登录'
-        }
-    },
-    {
-        path: '/admin',
-        component: Admin,
-        children: [
-            {
-                path: '/admin/index',
-                component: AdminIndex,
-                meta: {
-                    title: '仪表盘'
-                }
-            },
-            {
-                path: '/admin/article/list',
-                component: AdminArticleList,
-                meta: {
-                    title: '文章管理'
-                }
-            },
-            {
-                path: '/admin/category/list',
-                component: AdminCategoryList,
-                meta: {
-                    title: '分类管理'
-                }
-            },
-            {
-                path: '/admin/tag/list',
-                component: AdminTagList,
-                meta: {
-                    title: '标签管理'
-                }
-            },
-            {
-                path: '/admin/comment/list',
-                component: AdminCommentList,
-                meta: {
-                    title: '评论管理'
-                }
-            },
-            {
-                path: '/admin/blog/settings',
-                component: AdminBlogSettings,
-                meta: {
-                    title: '博客设置'
-                }
-            },
-        ]
+  { path: '/projects', component: Portfolio, meta: { title: '项目' } },
+  { path: '/projects/:slug', component: Portfolio, meta: { title: '项目案例' } },
+  { path: '/notes/:slug', component: LegacyNote, meta: { title: '文章详情' } },
+  { path: '/about', component: Portfolio, meta: { title: '关于我' } },
+  { path: '/contact', component: Portfolio, meta: { title: '联系' } },
+  { path: '/articles', component: ArticleList, meta: { title: '文章' } },
+  {
+    path: '/',
+    component: Index,
+    meta: {
+      title: '首页'
     }
+  },
+  {
+    path: '/archive/list',
+    component: ArchiveList,
+    meta: {
+      title: '归档'
+    }
+  },
+  {
+    path: '/category/list',
+    component: CategoryList,
+    meta: {
+      title: '分类'
+    }
+  },
+  {
+    path: '/tag/list',
+    component: TagList,
+    meta: {
+      title: '标签'
+    }
+  },
+  {
+    path: '/tag/article/list',
+    component: TagArticleList,
+    meta: {
+      title: '标签文章'
+    }
+  },
+  {
+    path: '/category/article/list',
+    component: CategoryArticleList,
+    meta: {
+      title: '分类文章'
+    }
+  },
+  {
+    path: '/article/detail/:id',
+    component: ArticleDetail,
+    meta: {
+      title: '文章详情'
+    }
+  },
+  {
+    path: '/search',
+    component: SearchResult,
+    meta: {
+      title: '搜索'
+    }
+  },
+  {
+    path: '/login',
+    component: Login,
+    meta: {
+      title: '登录'
+    }
+  },
+  {
+    path: '/admin',
+    component: Admin,
+    redirect: '/admin/index',
+    children: [
+      { path: '/admin/site', redirect: '/admin/profile' },
+      { path: '/admin/profile', component: SiteEditor, meta: { title: '个人资料' } },
+      { path: '/admin/projects', component: ProjectList, meta: { title: '项目管理' } },
+      {
+        path: '/admin/index',
+        component: AdminIndex,
+        meta: {
+          title: '仪表盘'
+        }
+      },
+      {
+        path: '/admin/article/list',
+        component: AdminArticleList,
+        meta: {
+          title: '文章管理'
+        }
+      },
+      {
+        path: '/admin/category/list',
+        component: AdminCategoryList,
+        meta: {
+          title: '分类管理'
+        }
+      },
+      {
+        path: '/admin/tag/list',
+        component: AdminTagList,
+        meta: {
+          title: '标签管理'
+        }
+      },
+      {
+        path: '/admin/comment/list',
+        component: AdminCommentList,
+        meta: {
+          title: '评论管理'
+        }
+      },
+      {
+        path: '/admin/blog/settings',
+        component: AdminBlogSettings,
+        meta: {
+          title: '站点设置'
+        }
+      }
+    ]
+  },
+  { path: '/register', redirect: '/login' },
+  { path: '/:pathMatch(.*)*', component: Portfolio, meta: { title: '页面不存在' } }
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes,
+  history: createWebHashHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    return savedPosition || { top: 0 }
+  },
+  routes
 })
 
 export default router

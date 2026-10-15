@@ -1,14 +1,14 @@
 package com.rookie.admin.model.vo.article;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -22,18 +22,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "更新文章请求VO")
+@Schema(description = "更新文章请求VO")
 public class UpdateArticleReqVO {
     @NotNull(message = "文章id不能为空")
     private Long id;
 
     @NotNull(message = "文章标题不能为空")
-    @Length(max = 50, message = "文章标题最大长度为50")
+    @Length(max = 150, message = "文章标题最大长度为150")
     private String title;
 
     @NotNull(message = "文章内容不能为空")
     private String content;
-    @NotNull(message = "文章封面不能为空")
     private String cover;
 
     private String summary;

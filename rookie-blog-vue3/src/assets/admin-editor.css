@@ -1,0 +1,67 @@
+.admin-editor {
+  color: var(--el-text-color-primary);
+}
+.admin-editor .editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.admin-editor .editor-toolbar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+}
+.admin-editor .editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.admin-editor .editor-help {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.8;
+  margin: 8px 0 20px;
+}
+.admin-editor .editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+.admin-editor .editor-card {
+  margin-bottom: 20px;
+}
+.admin-editor .editor-status {
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.admin-editor .editor-error {
+  color: var(--el-color-danger);
+}
+.admin-editor .asset-preview {
+  max-width: 100px;
+  max-height: 80px;
+  object-fit: contain;
+  margin-top: 10px;
+  display: block;
+}
+.admin-editor textarea {
+  resize: none;
+}
+.admin-editor .el-dialog {
+  max-width: calc(100vw - 32px);
+}
+@media (max-width: 800px) {
+  .admin-editor .editor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.admin-editor-dialog {
+  max-width: calc(100vw - 32px);
+}

@@ -210,6 +210,11 @@ body {
 }
 
 /* 深色自定义滚动条 */
+.site-dark,
+.site-dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  scrollbar-width: thin;
+}
 .site-dark ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

@@ -1,13 +1,13 @@
 package com.rookie.admin.model.vo.user;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author peishunwu
@@ -20,15 +20,15 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "更新管理员用户密码请求VO")
+@Schema(description = "更新管理员用户密码请求VO")
 public class UpdateAdminUserPasswordReqVO {
 
     @NotBlank(message = "用户名不能为空")
-    @ApiModelProperty(value = "用户名", required = true)
+    @Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
 
     @NotBlank(message = "密码不能为空")
-    @ApiModelProperty(value = "密码", required = true)
+    @Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 
 }

@@ -19,10 +19,10 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +57,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Value("${jwt.tokenHeaderKey}")
     private String tokenHeaderKey;
 
-    private static final List<String> docUrls = Arrays.asList("/login","/doc.html", "/webjars","/favicon.ico","/v2/api-docs","/swagger-resources");
+    private static final List<String> docUrls = Arrays.asList("/login","/doc.html", "/webjars","/favicon.ico","/v3/api-docs","/swagger-ui");
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 检查请求的 URL，如果是 knife4j 的接口文档的 URL，那么跳过 token 校验
@@ -72,7 +72,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 if (header.startsWith(tokenPrefix)){
                     // 如果请求头中有 token，则进行解析
                     String token = header.substring(7);
-                    log.info("token: {}", token);
                     if (StringUtils.isNotBlank(token)) {
                         try {
                             // 校验 token 是否有效

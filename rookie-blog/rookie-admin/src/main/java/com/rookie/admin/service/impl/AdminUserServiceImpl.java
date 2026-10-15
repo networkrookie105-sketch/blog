@@ -29,7 +29,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public Response updatePassword(UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO) {
         // 获取用户名和密码
-        String username = updateAdminUserPasswordReqVO.getUsername();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String password = updateAdminUserPasswordReqVO.getPassword();
         // 对密码进行加密
         String encodePassword = passwordEncoder.encode(password);
@@ -44,6 +44,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //获取用户名
         String username = authentication.getName();
-        return Response.success(FindUserInfoRspVO.builder().username(username).build());
+        return Response.success(FindUserInfoRspVO.builder().username(username)
+                .roles(authentication.getAuthorities().stream().map(a -> a.getAuthority()).toList()).build());
     }
 }

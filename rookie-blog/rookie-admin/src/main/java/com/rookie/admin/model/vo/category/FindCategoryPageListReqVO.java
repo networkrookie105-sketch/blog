@@ -1,7 +1,7 @@
 package com.rookie.admin.model.vo.category;
 
 import com.rookie.common.model.BasePageQuery;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "查询分类分页数据入参 VO")
+@Schema(description = "查询分类分页数据入参 VO")
 public class FindCategoryPageListReqVO extends BasePageQuery {
     /**
      * 分类名称

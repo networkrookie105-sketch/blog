@@ -42,7 +42,7 @@ public class ArchiveServiceImpl implements ArchiveService {
         Long current = reqVO.getCurrent();
         Long size = reqVO.getSize();
         // 分页查询「已发布」文章
-        IPage<ArticleDO> page = articleMapper.selectPublishedPageList(current, size);
+        IPage<ArticleDO> page = articleMapper.selectArchivePageList(current, size);
         List<ArticleDO> articleDOS = page.getRecords();
 
         List<FindArchiveArticlePageListRspVO> vos = Lists.newArrayList();
